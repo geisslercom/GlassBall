@@ -1,0 +1,37 @@
+<section data-ng-controller="GamesController" data-ng-init="find()">
+    <div class="page-header">
+        <h1>Games</h1>
+    </div>
+    <table class="table">
+        <thead>
+            <th></th>
+            <th>Player1</th>
+            <th>Player2</th>
+            <th>Punkte1</th>
+            <th>Punkte2</th>
+            <th>Status</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="game in games" ng-mouseover="over=true" ng-mouseleave="over=false">
+                <td><a data-ng-href="#!/games/{{game._id}}"><i class="glyphicon glyphicon-cd" ng-show="over"></i></a></td>
+                <td  ng-class="(game.pointP1 > game.pointP2) ? 'success' : 'default'">{{game.player1.displayName}}</td>
+                <td ng-class="(game.pointP1 < game.pointP2) ? 'success' : 'default'">{{game.player2.displayName}}</td>
+                <td ng-class="(game.pointP1 > game.pointP2) ? 'success' : 'default'">{{game.pointP1}} ({{100 /game.throwsP1 * game.pointP1 | number: 1}} %)</td>
+                <td ng-class="(game.pointP1 < game.pointP2) ? 'success' : 'default'">{{game.pointP2}} ({{100 /game.throwsP2 * game.pointP2  | number: 1}} %)</td>
+                <td>{{game.state}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td>Spiele gesamt: {{games.length}}</td>
+                <td>Würfe Durchschnitt: {{getTotalThrows() / games.length | number:1 }}</td>
+                <td>Genauigkeit Durchschnitt: {{getTotalAcc() / games.length | number:1}}</td>
+            </tr>
+        </tfoot>
+    </table>
+    
+    <div class="alert alert-warning text-center" data-ng-hide="!games.$resolved || games.length">
+    	No Games yet, why don't you <a href="/#!/games/create">create one</a>?
+    </div>
+</section>

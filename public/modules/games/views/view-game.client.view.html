@@ -1,0 +1,106 @@
+<section data-ng-controller="GamesController" data-ng-init="findOne()">
+	<div class="page-header">
+		<h1 data-ng-bind="game.name"></h1>
+		Punkte zum Sieg:<b data-ng-bind="game.maxPoints"></b><br>
+		Max Matchdauer:<b data-ng-bind="game.maxLength"></b>
+		<div class="label label-default pull-right" ng-class="getTimeStatus(this)">{{game.length}} / {{game.maxLength}}</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<button class="btn btn-success" ng-show="game.state === 'Open'" ng-click="startMatch(this)">Start</button>
+		</div>
+		<div class="row">
+			<hr>
+			<div class="col-md-6">
+				<label>Punkte für {{game.player1.displayName}}</label>
+				<div class="input-group input-group-lg">
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="checkWinner(this, 'pointP1')">+</button>
+					</span>
+					<input class="form-control" ng-model="game.pointP1"></input>
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="game.pointP1= game.pointP1-1">-</button>
+					</span>
+				</div>
+				<hr>
+				<label>Würfe</label>
+				<div class="input-group input-group-lg">
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="game.throwsP1= game.throwsP1+1">+</button>
+					</span>
+					<input class="form-control" ng-model="game.throwsP1"></input>
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="game.throwsP1= game.throwsP1-1">-</button>
+					</span>
+				</div>
+				<hr>
+				<label>Nearby</label>
+				<div class="input-group input-group-lg">
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="game.nearP1= game.nearP1+1">+</button>
+					</span>
+					<input class="form-control" ng-model="game.nearP1"></input>
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="game.nearP1= game.nearP1-1">-</button>
+					</span>
+				</div>
+				<label>Genauigkeit:</label>
+				<p>{{100 /game.throwsP1 * game.pointP1 || 0}} %</p>
+			</div>
+			<div class="col-md-6">
+				<label>Punkte für {{game.player2.displayName}}</label>
+				<div class="input-group input-group-lg">
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="checkWinner(this, 'pointP2')">+</button>
+					</span>
+					<input class="form-control" ng-model="game.pointP2"></input>
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="game.pointP2= game.pointP2-1">-</button>
+					</span>
+				</div>
+				<hr>
+				<label>Würfe</label>
+				<div class="input-group input-group-lg">
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="game.throwsP2= game.throwsP2+1">+</button>
+					</span>
+					<input class="form-control" ng-model="game.throwsP2"></input>
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="game.throwsP2= game.throwsP2-1">-</button>
+					</span>
+				</div>
+				<hr>
+				<label>Nearby</label>
+				<div class="input-group input-group-lg">
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="game.nearsP2= game.nearsP2+1">+</button>
+					</span>
+					<input class="form-control" ng-model="game.nearsP2"></input>
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-disabled="game.state!=='Running'" type="button" ng-click="game.nearsP2= game.nearsP2-1">-</button>
+					</span>
+				</div>
+				<label>Genauigkeit:</label>
+				<p>{{100 /game.throwsP2 * game.pointP2 || 0}} %</p>
+			</div>
+			<button ng-show="game.state !== 'Done'" type="button" class="btn btn-success" ng-click="saveP()">save</button>
+		</div>
+	</div>
+	<div class="row">&nbsp;</div>
+	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == game.user._id))">
+		<a class="btn btn-primary" href="/#!/games/{{game._id}}/edit">
+			<i class="glyphicon glyphicon-edit"></i>
+		</a>
+		<a class="btn btn-primary" data-ng-click="remove();">
+			<i class="glyphicon glyphicon-trash"></i>
+		</a>
+	</div>
+	<small>
+	<em class="text-muted">
+	Posted on
+	<span data-ng-bind="game.created | date:'mediumDate'"></span>
+	by
+	<span data-ng-bind="game.user.displayName"></span>
+	</em>
+	</small>
+</section>
